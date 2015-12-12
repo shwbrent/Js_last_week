@@ -1,0 +1,42 @@
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.29/angular.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript">
+function CommentController ($scope) {
+  $.get("/comment", function (data) {
+    $scope.comments = data;
+    $scope.$apply();   
+  });
+  
+  $scope.commentSubmit = function () {
+    $.post("/comment/create", {
+      title: $scope.title
+    })
+    .done(function (data) {
+      console.log(data);
+      $scope.comments.push({title: $scope.title});
+      $scope.title = "";
+      $scope.$apply();
+    });
+  };
+  
+  $("form").on("submit", function () {
+    return false;
+  });
+}
+</script>
+
+</div>
+
+<div ng-app ng-controller="CommentController" class="default-page">
+    <h1>hello Comment</h1>
+    <ul >
+      <li ng-repeat="comment in comments"> {{comment.title}} </li>
+    </ul>
+    <form action="/comment/create" method="POST">
+      <input type="text" name="title" ng-model="title">
+      <input type="submit" value="Submit" ng-click="commentSubmit()">
+    </form>
+</div>

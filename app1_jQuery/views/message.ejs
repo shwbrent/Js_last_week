@@ -1,0 +1,39 @@
+<div class="default-page">
+    <h1>hello Comment</h1>
+     <ul>
+    </ul>
+    <form action="/comment/create" method="POST">
+      <input type="text" name="title">
+      <input type="submit" value="Submit">
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+
+    $.get("/comment", function (data) {
+  
+    console.log("data from server ---")
+    console.log(data);
+    var html="";
+    for(var i=0; i<data.length; i++) {
+      html = html + "<li>" + data[i].title + "</li>";
+    }
+  
+    $("ul").html(html);
+  });
+
+  $("form").on("submit", function (e) {
+    $.post("/comment/create", {
+      title: $("input[name=title]").val()
+    })
+    .done(function (data) {
+      console.log(data);
+      $("ul").append("<li>" + $("input[name=title]").val() + "</li>");
+    });
+  
+    return false;
+  });
+</script>
+
